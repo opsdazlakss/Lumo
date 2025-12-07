@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumo - Arkadaşlarınla konuşmanın yeni yolu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: #1e1f22;
+            overflow-x: hidden;
+            color: #f2f3f5;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(49, 51, 56, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 16px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(88, 101, 242, 0.1);
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-content {
+            max-width: 1260px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 800;
+            color: #f2f3f5;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #5865f2, #7289da);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .nav-download-btn {
+            background: #5865f2;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-download-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .nav-download-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .nav-download-btn:hover {
+            background: #4752c4;
+            box-shadow: 0 8px 20px rgba(88, 101, 242, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(180deg, #2b2d31 0%, #1e1f22 100%);
+            padding: 140px 40px 80px;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at top, rgba(88, 101, 242, 0.15), transparent 70%);
+            pointer-events: none;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(88, 101, 242, 0.3);
+            border-radius: 50%;
+            animation: rise 15s infinite ease-in;
+        }
+
+        .particle:nth-child(1) { width: 4px; height: 4px; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 6px; height: 6px; left: 20%; animation-delay: 2s; }
+        .particle:nth-child(3) { width: 3px; height: 3px; left: 30%; animation-delay: 4s; }
+        .particle:nth-child(4) { width: 5px; height: 5px; left: 40%; animation-delay: 1s; }
+        .particle:nth-child(5) { width: 4px; height: 4px; left: 50%; animation-delay: 3s; }
+        .particle:nth-child(6) { width: 6px; height: 6px; left: 60%; animation-delay: 5s; }
+        .particle:nth-child(7) { width: 3px; height: 3px; left: 70%; animation-delay: 2s; }
+        .particle:nth-child(8) { width: 5px; height: 5px; left: 80%; animation-delay: 4s; }
+        .particle:nth-child(9) { width: 4px; height: 4px; left: 90%; animation-delay: 1s; }
+
+        @keyframes rise {
+            0% {
+                bottom: -100px;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                bottom: 100%;
+                opacity: 0;
+            }
+        }
+
+        .hero-content {
+            max-width: 1260px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            color: #f2f3f5;
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            animation: fadeInUp 0.8s ease;
+            background: linear-gradient(135deg, #f2f3f5 0%, #b5bac1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero p {
+            color: #b5bac1;
+            font-size: 20px;
+            line-height: 1.625;
+            margin-bottom: 32px;
+            max-width: 780px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .download-btn-large {
+            background: linear-gradient(135deg, #5865f2, #7289da);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.4s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(88, 101, 242, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn-large::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .download-btn-large:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(88, 101, 242, 0.5);
+        }
+
+        .download-icon {
+            font-size: 24px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .hero-showcase {
+            background: linear-gradient(135deg, #2b2d31 0%, #1e1f22 100%);
+            border-radius: 20px;
+            padding: 100px;
+            text-align: center;
+            font-size: 80px;
+            border: 1px solid rgba(88, 101, 242, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+
+        .hero-showcase::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(88, 101, 242, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: #1e1f22;
+            padding: 80px 40px;
+            position: relative;
+        }
+
+        .stats-content {
+            max-width: 1260px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 30px;
+            background: rgba(49, 51, 56, 0.5);
+            border-radius: 16px;
+            border: 1px solid rgba(88, 101, 242, 0.1);
+            transition: all 0.4s ease;
+            animation: fadeInUp 0.8s ease both;
+        }
+
+        .stat-item:nth-child(1) { animation-delay: 0.1s; }
+        .stat-item:nth-child(2) { animation-delay: 0.2s; }
+        .stat-item:nth-child(3) { animation-delay: 0.3s; }
+
+        .stat-item:hover {
+            transform: translateY(-10px) scale(1.05);
+            border-color: #5865f2;
+            box-shadow: 0 15px 40px rgba(88, 101, 242, 0.3);
+            background: rgba(88, 101, 242, 0.1);
+        }
+
+        .stat-item h3 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #5865f2, #7289da);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .stat-item p {
+            color: #b5bac1;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        /* Features Section */
+        .features {
+            background: #1e1f22;
+            padding: 120px 40px;
+        }
+
+        .feature-row {
+            max-width: 1260px;
+            margin: 0 auto 120px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .feature-row:nth-child(1) { animation-delay: 0.2s; }
+        .feature-row:nth-child(2) { animation-delay: 0.4s; }
+        .feature-row:nth-child(3) { animation-delay: 0.6s; }
+
+        .feature-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-row.reverse {
+            direction: rtl;
+        }
+
+        .feature-row.reverse > * {
+            direction: ltr;
+        }
+
+        .feature-content h2 {
+            font-size: 48px;
+            font-weight: 800;
+            color: #f2f3f5;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .feature-content p {
+            font-size: 20px;
+            line-height: 1.625;
+            color: #b5bac1;
+        }
+
+        .feature-image {
+            width: 100%;
+            background: linear-gradient(135deg, #2b2d31 0%, #232428 100%);
+            border-radius: 20px;
+            aspect-ratio: 16/9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            border: 1px solid rgba(88, 101, 242, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(88, 101, 242, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .feature-image:hover::before {
+            left: 100%;
+        }
+
+        .feature-image:hover {
+            transform: scale(1.05);
+            border-color: #5865f2;
+            box-shadow: 0 20px 50px rgba(88, 101, 242, 0.4);
+        }
+
+        /* Download Section */
+        .download-section {
+            background: linear-gradient(135deg, #2b2d31 0%, #1e1f22 100%);
+            padding: 120px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(88, 101, 242, 0.1), transparent 70%);
+            pointer-events: none;
+        }
+
+        .download-section h2 {
+            font-size: 40px;
+            font-weight: 800;
+            color: #f2f3f5;
+            margin-bottom: 48px;
+            position: relative;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .platform-cards {
+            max-width: 1260px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .platform-card {
+            background: rgba(49, 51, 56, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 48px 32px;
+            border-radius: 16px;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(88, 101, 242, 0.1);
+            animation: fadeInUp 0.8s ease both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-card:nth-child(1) { animation-delay: 0.2s; }
+        .platform-card:nth-child(2) { animation-delay: 0.4s; }
+        .platform-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(88, 101, 242, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .platform-card:hover::before {
+            opacity: 1;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            border-color: #5865f2;
+            box-shadow: 0 20px 50px rgba(88, 101, 242, 0.4);
+        }
+
+        .platform-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .platform-card:nth-child(2) .platform-icon { animation-delay: 1s; }
+        .platform-card:nth-child(3) .platform-icon { animation-delay: 2s; }
+
+        .platform-card h3 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f2f3f5;
+            margin-bottom: 12px;
+        }
+
+        .platform-card p {
+            color: #b5bac1;
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+
+        .platform-download-btn {
+            background: linear-gradient(135deg, #5865f2, #7289da);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 50px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-download-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .platform-download-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .platform-download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(88, 101, 242, 0.5);
+        }
+
+        .platform-download-btn.disabled {
+            background: #3f4147;
+            color: #6d6f78;
+            cursor: not-allowed;
+        }
+
+        .platform-download-btn.disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, #3ba55d, #2d8a4d);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 600px;
+            margin: 32px auto 0;
+            font-weight: 600;
+            font-size: 16px;
+            animation: slideUp 0.5s ease;
+            box-shadow: 0 10px 30px rgba(59, 165, 93, 0.3);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Warning Section */
+        .warning-section {
+            background: rgba(250, 166, 26, 0.1);
+            border: 1px solid rgba(250, 166, 26, 0.3);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 800px;
+            margin: 60px auto 0;
+            animation: fadeInUp 0.8s ease 0.8s both;
+        }
+
+        .warning-section h3 {
+            color: #faa61a;
+            font-size: 24px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .warning-section p {
+            color: #b5bac1;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .warning-section ol {
+            color: #b5bac1;
+            padding-left: 24px;
+            line-height: 1.8;
+        }
+
+        .warning-section li {
+            margin-bottom: 8px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #313338;
+            padding: 80px 40px 40px;
+            color: #b5bac1;
+            border-top: 1px solid rgba(88, 101, 242, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1260px;
+            margin: 0 auto;
+        }
+
+        .footer-brand {
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .footer-brand h3 {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #5865f2, #7289da);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-divider {
+            height: 1px;
+            background: rgba(88, 101, 242, 0.2);
+            margin: 32px 0;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            color: #6d6f78;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .hero-showcase {
+                padding: 60px 40px;
+                font-size: 48px;
+            }
+
+            .feature-row {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .feature-row.reverse {
+                direction: ltr;
+            }
+
+            .feature-content h2 {
+                font-size: 32px;
+            }
+
+            .feature-content p {
+                font-size: 16px;
+            }
+
+            .nav-content {
+                padding: 0 24px;
+            }
+
+            .download-section,
+            .features,
+            .footer,
+            .stats-section {
+                padding: 60px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">
+                <div class="logo-icon">💬</div>
+                <span>LUMO</span>
+            </div>
+            <button class="nav-download-btn" onclick="downloadLumo()">
+                Lumo'yu İndir
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+        <div class="hero-content">
+            <h1>Arkadaşlarınla konuşmanın yeni yolu</h1>
+            <p>
+                Okuldan bir kulübe, oyun grubundan dünya çapında sanat topluluğuna kadar, 
+                Lumo ile her gün vakit geçireceğin bir yer yaratmayı kolaylaştırır.
+            </p>
+            <div class="hero-buttons">
+                <button class="download-btn-large" onclick="downloadLumo()">
+                    <span class="download-icon">⬇</span>
+                    <span>Windows için İndir</span>
+                </button>
+            </div>
+            <div class="hero-showcase">
+                💬
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-content">
+            <div class="stat-item">
+                <h3>HIZLI</h3>
+                <p>Anlık Mesajlaşma</p>
+            </div>
+            <div class="stat-item">
+                <h3>GÜVENLİ</h3>
+                <p>Şifrelenmiş İletişim</p>
+            </div>
+            <div class="stat-item">
+                <h3>KOLAY</h3>
+                <p>Basit Kullanım</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="feature-row">
+            <div class="feature-image">💬</div>
+            <div class="feature-content">
+                <h2>Bir davet yeterli</h2>
+                <p>
+                    Lumo sunucuları, arkadaşlarınızla ve topluluklarla takılabileceğiniz 
+                    organize alanlardır. Bir davet ile hemen başlayın.
+                </p>
+            </div>
+        </div>
+
+        <div class="feature-row reverse">
+            <div class="feature-image">🎮</div>
+            <div class="feature-content">
+                <h2>Burası sohbet için</h2>
+                <p>
+                    Metin sohbet ile günlük konuşmalara dahil olmak hiç bu kadar kolay olmamıştı. 
+                    Arkadaşlarınızla anında bağlantı kurun.
+                </p>
+            </div>
+        </div>
+
+        <div class="feature-row">
+            <div class="feature-image">🔒</div>
+            <div class="feature-content">
+                <h2>Güvenilir teknoloji</h2>
+                <p>
+                    Düşük gecikme süresi ve şifreli iletişim. Konuşmalarınız tamamen güvende 
+                    ve önüne hiçbir şey geçmesin.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section class="download-section">
+        <h2>Lumo'yu indirmeye hazır mısın?</h2>
+        <div class="platform-cards">
+            <div class="platform-card">
+                <div class="platform-icon">🪟</div>
+                <h3>Windows</h3>
+                <p>Windows 10 ve üzeri</p>
+                <button class="platform-download-btn" onclick="downloadLumo()">
+                    İndir
+                </button>
+            </div>
+            <div class="platform-card">
+                <div class="platform-icon">🍎</div>
+                <h3>macOS</h3>
+                <p>Yakında</p>
+                <button class="platform-download-btn disabled" disabled>
+                    Yakında
+                </button>
+            </div>
+            <div class="platform-card">
+                <div class="platform-icon">🐧</div>
+                <h3>Linux</h3>
+                <p>Yakında</p>
+                <button class="platform-download-btn disabled" disabled>
+                    Yakında
+                </button>
+            </div>
+        </div>
+        
+        <div class="warning-section">
+            <h3>⚠️ Windows SmartScreen Uyarısı</h3>
+            <p>İndirme sonrası Windows SmartScreen uyarısı alabilirsiniz. Bu normal bir güvenlik önlemidir ve dosyanız tamamen güvenlidir.</p>
+            <ol>
+                <li>"Daha fazla bilgi" veya "More info" linkine tıklayın</li>
+                <li>"Yine de çalıştır" veya "Run anyway" butonuna basın</li>
+                <li>Kurulum başlayacaktır</li>
+            </ol>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            ✓ İndirme başladı! Kurulum dosyası bilgisayarınıza kaydediliyor...
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>💬 LUMO</h3>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-bottom">
+                <p>© 2025 Lumo. Tüm hakları saklıdır.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function downloadLumo() {
+            const fileUrl = 'https://github.com/opsdazlakss/Lumo/releases/download/V1/LumoSetup_DSS.exe';
+
+            const link = document.createElement('a');
+            link.href = fileUrl;
+            link.download = 'Lumo-Setup.exe';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            const message = document.getElementById('successMessage');
+            message.classList.add('show');
+            
+            setTimeout(() => {
+                message.classList.remove('show');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
