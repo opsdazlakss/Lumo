@@ -1,1 +1,3 @@
 # Lumo
+
+Tüm hakları saklıdır.
