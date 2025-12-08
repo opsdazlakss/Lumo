@@ -452,7 +452,7 @@
 
         .platform-icon {
             font-size: 80px;
-            margin-bottom: 30px;
+            margin-bottom: -100px;
             display: inline-block;
             animation: float 3s ease-in-out infinite;
         }
@@ -518,9 +518,11 @@
             font-size: 28px;
             margin-bottom: 20px;
             display: flex;
+            justify-content: center; /* ORTALAMA BU */
             align-items: center;
             gap: 15px;
         }
+
 
         .warning-section p {
             color: #d4d4d4;
@@ -529,10 +531,12 @@
             font-size: 16px;
         }
 
-        .warning-section ol {
-            color: #d4d4d4;
+        .warning-section ul {
+            color: #ffca70;
             padding-left: 30px;
             line-height: 2;
+            list-style-type: disc; /* Nokta işareti */
+            text-align: left;      /* Sola yasla */
         }
 
         .success-message {
@@ -751,7 +755,11 @@
         <h2>Lumo'yu indirmeye hazır mısın?</h2>
         <div class="platform-cards">
             <div class="platform-card">
-                <div class="platform-icon">🪟</div>
+                <div class="platform-icon">
+                    <img src="https://github.com/opsdazlakss/Lumo/blob/main/Adobe%20Express%20-%20file%20(5).png?raw=true" 
+                        alt="Windows Icon" 
+                        style="width: 240px; height: auto;">
+                </div>
                 <h3>Windows</h3>
                 <p>Windows 10 ve üzeri</p>
                 <button class="platform-download-btn" onclick="downloadLumo()">
@@ -762,13 +770,14 @@
         
         <div class="warning-section">
             <h3>⚠️ Windows SmartScreen Uyarısı</h3>
-            <p>İndirme sonrası Windows SmartScreen uyarısı alabilirsiniz. Bu normal bir güvenlik önlemidir ve dosyanız tamamen güvenlidir.</p>
-            <ol>
-                <p>"Daha fazla bilgi" veya "More info" linkine tıklayın<p>
-                <p>"Yine de çalıştır" veya "Run anyway" butonuna basın<p>
-                <p>Kurulum başlayacaktır<p>
-            </ol>
+            <ul>
+                <li>İndirme sonrası Windows SmartScreen uyarısı alabilirsiniz. Bu normal bir güvenlik önlemidir ve dosyanız tamamen güvenlidir.</li>
+                <li>"Daha fazla bilgi" veya "More info" linkine tıklayın</li>
+                <li>"Yine de çalıştır" veya "Run anyway" butonuna basın</li>
+                <li>Kurulum başlayacaktır</li>
+            </ul>
         </div>
+
 
         <div class="success-message" id="successMessage">
             ✓ İndirme başladı! Kurulum dosyası bilgisayarınıza kaydediliyor...
@@ -792,6 +801,25 @@
     </footer>
 
     <script>
+        // Create starfield
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numStars = 150;
+            
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        createStars();
+
         function downloadLumo() {
             const fileUrl = 'https://github.com/opsdazlakss/Lumo/releases/download/V1/LumoSetup_DSS.exe';
             
