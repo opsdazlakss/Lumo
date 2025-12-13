@@ -846,16 +846,16 @@
             
             // Linkleri buradan değiştirebilirsiniz
             if (os === 'win') {
-                fileUrl = 'https://github.com/opsdazlakss/Lumo/releases/download/V1/LumoSetup_win.exe';
+                fileUrl = 'https://github.com/opsdazlakss/lumobuild/releases/download/v1.1.1/LumoSetup_win.exe';
                 fileName = 'Lumo-Setup.exe';
                 // Sadece Windows için uyarıyı göster
                 document.getElementById('windowsWarning').classList.add('active');
             } else if (os === 'mac') {
-                fileUrl = 'https://github.com/opsdazlakss/Lumo/releases/download/V1/LumoSetup_mac.dmg'; // Örnek link
+                fileUrl = 'https://github.com/opsdazlakss/lumobuild/releases/download/v1.1.1/LumoSetup_mac.dmg'; // Örnek link
                 fileName = 'Lumo-Setup.dmg';
                 document.getElementById('windowsWarning').classList.remove('active');
             } else if (os === 'linux') {
-                fileUrl = 'https://github.com/opsdazlakss/Lumo/releases/download/V1/LumoSetup_linux.AppImage'; // Örnek link
+                fileUrl = 'https://github.com/opsdazlakss/lumobuild/releases/download/v1.1.1/LumoSetup_linux.AppImage'; // Örnek link
                 fileName = 'Lumo-Setup.deb';
                 document.getElementById('windowsWarning').classList.remove('active');
             }
