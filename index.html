@@ -465,8 +465,8 @@
             margin: 0 auto;
             margin-bottom: 60px;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
             padding: 0 20px;
         }
 
@@ -860,6 +860,20 @@
                 </button>
             </div>
 
+            <!-- Android Card -->
+            <div class="platform-card">
+                <div class="platform-icon">
+                    <img src="https://github.com/opsdazlakss/Lumo/blob/main/Adobe%20Express%20-%20file%20(5).png?raw=true" 
+                        alt="Android Icon" 
+                        style="width: auto; height: 100%; object-fit: contain;">
+                </div>
+                <h3>Android</h3>
+                <p>APK File</p>
+                <button class="platform-download-btn" onclick="downloadLumo('android')">
+                    Download
+                </button>
+            </div>
+
         </div>
         
         <div class="warning-section" id="windowsWarning">
@@ -933,9 +947,12 @@
                         fileName = asset ? asset.name : 'Lumo-Setup.dmg';
                         document.getElementById('windowsWarning').classList.remove('active');
                     } else if (os === 'linux') {
-                        const asset = release.assets.find(a => a.name.endsWith('.AppImage') && a.name.includes('linux'));
-                        fileUrl = asset ? asset.browser_download_url : null;
                         fileName = asset ? asset.name : 'Lumo-Setup.AppImage';
+                        document.getElementById('windowsWarning').classList.remove('active');
+                    } else if (os === 'android') {
+                        const asset = release.assets.find(a => a.name.endsWith('.apk'));
+                        fileUrl = asset ? asset.browser_download_url : null;
+                        fileName = asset ? asset.name : 'Lumo.apk';
                         document.getElementById('windowsWarning').classList.remove('active');
                     }
                 }
@@ -959,7 +976,7 @@
 
                     // Update success message
                     message.style.background = "linear-gradient(135deg, #4caf50, #45a049)"; // Green (success)
-                    message.textContent = `✓ Download started for ${os === 'win' ? 'Windows' : os === 'mac' ? 'macOS' : 'Linux'}! (${release ? release.tag_name : ''})`;
+                    message.textContent = `✓ Download started for ${os === 'win' ? 'Windows' : os === 'mac' ? 'macOS' : os === 'android' ? 'Android' : 'Linux'}! (${release ? release.tag_name : ''})`;
                 } else {
                     throw new Error("Download link not found");
                 }
