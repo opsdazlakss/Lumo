@@ -947,6 +947,8 @@
                         fileName = asset ? asset.name : 'Lumo-Setup.dmg';
                         document.getElementById('windowsWarning').classList.remove('active');
                     } else if (os === 'linux') {
+                        const asset = release.assets.find(a => a.name.endsWith('.AppImage') && a.name.includes('linux'));
+                        fileUrl = asset ? asset.browser_download_url : null;
                         fileName = asset ? asset.name : 'Lumo-Setup.AppImage';
                         document.getElementById('windowsWarning').classList.remove('active');
                     } else if (os === 'android') {
