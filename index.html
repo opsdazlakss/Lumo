@@ -839,44 +839,89 @@
     </footer>
 
     <script>
+        // GitHub API'den en son sürüm bilgisini getiren fonksiyon
+        async function getLatestRelease() {
+            try {
+                const response = await fetch('https://api.github.com/repos/opsdazlakss/lumobuild/releases/latest');
+                if (!response.ok) throw new Error('API yanıt vermedi');
+                return await response.json();
+            } catch (error) {
+                console.error('Versiyon bilgisi alınamadı:', error);
+                return null;
+            }
+        }
 
-        function downloadLumo(os) {
-            let fileUrl = '';
-            let fileName = '';
+        async function downloadLumo(os) {
+            const message = document.getElementById('successMessage');
             
-            // Linkleri buradan değiştirebilirsiniz
-            if (os === 'win') {
-                fileUrl = 'https://github.com/opsdazlakss/lumobuild/releases/download/v1.1.1/LumoSetup_win.exe';
-                fileName = 'Lumo-Setup.exe';
-                // Sadece Windows için uyarıyı göster
-                document.getElementById('windowsWarning').classList.add('active');
-            } else if (os === 'mac') {
-                fileUrl = 'https://github.com/opsdazlakss/lumobuild/releases/download/v1.1.1/LumoSetup_mac.dmg'; // Örnek link
-                fileName = 'Lumo-Setup.dmg';
-                document.getElementById('windowsWarning').classList.remove('active');
-            } else if (os === 'linux') {
-                fileUrl = 'https://github.com/opsdazlakss/lumobuild/releases/download/v1.1.1/LumoSetup_linux.AppImage'; // Örnek link
-                fileName = 'Lumo-Setup.deb';
-                document.getElementById('windowsWarning').classList.remove('active');
+            // Kullanıcıya bilgi ver (Bekleme durumu)
+            message.textContent = "Güncel sürüm kontrol ediliyor...";
+            message.style.background = "linear-gradient(135deg, #FF9800, #F57C00)"; // Turuncu (bekleme)
+            message.classList.add('show');
+
+            try {
+                const release = await getLatestRelease();
+                let fileUrl = '';
+                let fileName = '';
+                
+                if (release && release.assets) {
+                    // İşletim sistemine göre doğru dosyayı bul
+                    if (os === 'win') {
+                        const asset = release.assets.find(a => a.name.endsWith('.exe') && a.name.includes('win'));
+                        fileUrl = asset ? asset.browser_download_url : null;
+                        fileName = asset ? asset.name : 'Lumo-Setup-win.exe';
+                        document.getElementById('windowsWarning').classList.add('active');
+                    } else if (os === 'mac') {
+                        const asset = release.assets.find(a => a.name.endsWith('.dmg') && a.name.includes('mac'));
+                        fileUrl = asset ? asset.browser_download_url : null;
+                        fileName = asset ? asset.name : 'Lumo-Setup.dmg';
+                        document.getElementById('windowsWarning').classList.remove('active');
+                    } else if (os === 'linux') {
+                        const asset = release.assets.find(a => a.name.endsWith('.AppImage') && a.name.includes('linux'));
+                        fileUrl = asset ? asset.browser_download_url : null;
+                        fileName = asset ? asset.name : 'Lumo-Setup.AppImage';
+                        document.getElementById('windowsWarning').classList.remove('active');
+                    }
+                }
+
+                // Eğer API'den link bulunamazsa yedek (fallback) linkleri kullan (gerekirse burayı güncelleyin)
+                if (!fileUrl) {
+                    console.warn('Otomatik link bulunamadı, varsayılan sürüm indiriliyor.');
+                    // Buraya manuel son çalışan linki koyabilirsiniz veya hata verdirebilirsiniz
+                    if (os === 'win') fileUrl = 'https://github.com/opsdazlakss/lumobuild/releases/latest/download/LumoSetup_win.exe'; 
+                    // Not: latest/download/dosya_ismi formatı da genelde çalışır ama release isimlendirmesi değişirse bozulabilir.
+                }
+
+                if (fileUrl) {
+                    // Dosya indirme işlemi
+                    const link = document.createElement('a');
+                    link.href = fileUrl;
+                    link.download = fileName; // Bu özellik same-origin değilse bazen çalışmayabilir, tarayıcı dosya ismini URL'den alır.
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    // Başarı mesajı güncelle
+                    message.style.background = "linear-gradient(135deg, #4caf50, #45a049)"; // Yeşil (başarı)
+                    message.textContent = `✓ ${os === 'win' ? 'Windows' : os === 'mac' ? 'macOS' : 'Linux'} için indirme başladı! (${release ? release.tag_name : ''})`;
+                } else {
+                    throw new Error("İndirme linki bulunamadı");
+                }
+
+            } catch (error) {
+                console.error('İndirme hatası:', error);
+                message.style.background = "linear-gradient(135deg, #f44336, #d32f2f)"; // Kırmızı (hata)
+                message.textContent = "İndirme başlatılamadı. Lütfen internet bağlantınızı kontrol edin.";
             }
 
-            // Dosya indirme işlemi
-            const link = document.createElement('a');
-            link.href = fileUrl;
-            link.download = fileName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            // Başarı mesajı
-            const message = document.getElementById('successMessage');
-            message.textContent = `✓ ${os === 'win' ? 'Windows' : os === 'mac' ? 'macOS' : 'Linux'} için indirme başladı!`;
-            message.classList.add('show');
-            
+            // Mesajı 5 saniye sonra gizle
             setTimeout(() => {
                 message.classList.remove('show');
             }, 5000);
         }
+        
+        // Sayfa yüklendiğinde versiyon bilgisini alıp bir yere yazmak isterseniz buraya ekleyebilirsiniz.
+        // Örn: document.getElementById('version-display').innerText = await getLatestRelease().tag_name;
     </script>
 </body>
 </html>
